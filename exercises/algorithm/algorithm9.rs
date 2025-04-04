@@ -1,11 +1,11 @@
 /*
-	heap
-	This question requires you to implement a binary heap function
+    heap
+    This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
 
 use std::cmp::Ord;
 use std::default::Default;
+use std::process::id;
 
 pub struct Heap<T>
 where
@@ -38,6 +38,16 @@ where
 
     pub fn add(&mut self, value: T) {
         //TODO
+        self.count += 1;
+        self.items.push(value);
+        let mut cur_idx = self.count;
+        while cur_idx != 1 {
+            let parent_idx = self.parent_idx(cur_idx);
+            if (self.comparator)(&self.items[cur_idx], &self.items[parent_idx]) {
+                self.items.swap(cur_idx, parent_idx);
+            }
+            cur_idx = parent_idx;
+        }
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
@@ -58,7 +68,7 @@ where
 
     fn smallest_child_idx(&self, idx: usize) -> usize {
         //TODO
-		0
+        0
     }
 }
 
@@ -85,7 +95,27 @@ where
 
     fn next(&mut self) -> Option<T> {
         //TODO
-		None
+        if self.is_empty() {
+            None
+        } else {
+            let mut idx = 1;
+            let mut left_idx = self.left_child_idx(idx);
+            while left_idx <= self.count {
+                let mut candidate_parent_idx = left_idx;
+                let right_idx = self.right_child_idx(idx);
+                if right_idx <= self.count
+                    && (self.comparator)(&self.items[right_idx], &self.items[left_idx])
+                {
+                    candidate_parent_idx = right_idx;
+                }
+                self.items.swap(idx, candidate_parent_idx);
+                idx = candidate_parent_idx;
+                left_idx = self.left_child_idx(idx);
+            }
+            self.count -= 1;
+            let result = self.items.pop().unwrap();
+            Some(result)
+        }
     }
 }
 

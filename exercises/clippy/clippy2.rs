@@ -3,12 +3,10 @@
 // Execute `rustlings hint clippy2` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
-
 fn main() {
-    let mut res = 42;
-    let option = Some(12);
-    for x in option {
+    let mut res:u64 = 42;
+    let mut option = Some(12);
+    while let Some(x) = option.take() {
         res += x;
     }
     println!("{}", res);
